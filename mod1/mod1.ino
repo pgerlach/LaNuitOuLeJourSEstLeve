@@ -3,6 +3,10 @@
 #include <nRF24L01.h>
 #include <MirfHardwareSpiDriver.h>
 
+// timings
+#define BRAKE_TIMING (3000)
+#define RELEASE_TIMING (3000)
+
 // common
 #define PIN_NRF24L01_CS (9)
 #define PIN_NRF24L01_CE (8)
@@ -75,11 +79,11 @@ void loop() {
 
     switch (msg) {
       case MSG_BRAKE:
-        Serial.println("brake");
+        Serial.println("msg brake");
         msg_brake();
         break;
       case MSG_FREE:
-        Serial.println("release");
+        Serial.println("msg release");
         msg_release();
         break;
     }
@@ -161,8 +165,17 @@ void motors_loop() {
   if (state == E_STATE_STOPPED || state == E_STATE_FREE) {
     return ;
   }
+  long timing = 0;
+  switch (state) {
+    case E_STATE_BRAKING:
+      timing = BRAKE_TIMING;
+      break;
+    case E_STATE_RELEASING:
+      timing = RELEASE_TIMING;
+      break;
+  }
   // is it time to stop ?
-  if (millis() - actionStartTime > 3000) {
+  if (millis() - actionStartTime > timing) {
     Serial.println("action done -> stop the motors");
     motors_stop();
     switch (state) {
