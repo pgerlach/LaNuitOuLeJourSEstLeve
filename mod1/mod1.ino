@@ -4,8 +4,8 @@
 #include <MirfHardwareSpiDriver.h>
 
 // timings
-#define BRAKE_TIMING (3000)
-#define RELEASE_TIMING (3000)
+#define BRAKE_TIMING (500)
+#define RELEASE_TIMING (500)
 
 // common
 #define PIN_NRF24L01_CS (9)
@@ -18,6 +18,10 @@
 #define ID_MODULE_1 "mod1"
 #define ID_MODULE_2 "mod2"
 
+#define DEBUG_MOTORS(msg) // Serial.println(msg)
+#define DEBUG_MSGS(msg) Serial.println(msg)
+
+
 // module
 const int PIN_ENA = 2;
 const int PIN_IN1 = 3;
@@ -29,6 +33,8 @@ const int PIN_IN4 = 7;
 const int MOTOR_1_PINS[] = { PIN_ENA, PIN_IN1, PIN_IN2 };
 const int MOTOR_2_PINS[] = { PIN_ENB, PIN_IN4, PIN_IN3 };
 
+const int PIN_LED_NO_MSG = A0;
+
 enum e_state {
   E_STATE_FREE,
   E_STATE_BRAKING,
@@ -38,8 +44,10 @@ enum e_state {
 
 long actionStartTime = millis();
 
+long lastMessageDisplayTimer = 0;
+
 void setup(){
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   // init nRF24L01
   Mirf.cePin = PIN_NRF24L01_CE;
@@ -66,26 +74,48 @@ void setup(){
     pinMode(MOTOR_2_PINS[i], OUTPUT);
   }
   motors_init();
+  pinMode(PIN_LED_NO_MSG, OUTPUT);
+  digitalWrite(PIN_LED_NO_MSG, LOW);
 
   state = E_STATE_FREE;
+
+  lastMessageDisplayTimer = millis();
 
   Serial.println("WELCOME TO THE MODULE 1 LOGS");
 }
 
+int loopsWithNoActions = 0;
+
 void loop() {
   if (Mirf.dataReady()) {
+    digitalWrite(PIN_LED_NO_MSG, LOW);
+    lastMessageDisplayTimer = millis();
     byte msg;
     Mirf.getData((byte *) &msg);
 
+    actionStartTime = millis();
     switch (msg) {
       case MSG_BRAKE:
-        Serial.println("msg brake");
+        DEBUG_MSGS("msg brake");
         msg_brake();
         break;
       case MSG_FREE:
-        Serial.println("msg release");
+        DEBUG_MSGS("msg release");
         msg_release();
         break;
+      default:
+        DEBUG_MSGS("msg UNKNOWN");
+        DEBUG_MSGS((char)msg);
+        break;
+    }
+  } else {
+    if (millis() - lastMessageDisplayTimer > 1500) {
+      digitalWrite(PIN_LED_NO_MSG, HIGH);
+      byte chRegisterValue = 0;
+      Mirf.readRegister(RF_CH, &chRegisterValue, 1);
+      DEBUG_MSGS("1.5 second w/ no data");
+      DEBUG_MSGS((int)chRegisterValue);
+      lastMessageDisplayTimer = millis();
     }
   }
 
@@ -109,7 +139,7 @@ void msg_brake() {
   switch (state) {
     case E_STATE_BRAKING:
     case E_STATE_STOPPED:
-      // nothing to do
+      DEBUG_MOTORS("BREAK asked but already stopped");
       break;
     case E_STATE_FREE:
     case E_STATE_RELEASING:
@@ -124,7 +154,7 @@ void msg_release() {
   switch (state) {
     case E_STATE_FREE:
     case E_STATE_RELEASING:
-      // nothing to do
+      DEBUG_MOTORS("RELEASE asked but already released");
       break;
     case E_STATE_BRAKING:
     case E_STATE_STOPPED:
@@ -136,28 +166,26 @@ void msg_release() {
 
 
 void motors_init_brake() {
-  Serial.println("init brake");
-  actionStartTime = millis();
+  DEBUG_MOTORS("init brake");
   motor(MOTOR_1_PINS, MOTOR_GO_FWD);
   motor(MOTOR_2_PINS, MOTOR_GO_FWD);
 }
 
 void motors_init_release() {
-  Serial.println("init release");
-  actionStartTime = millis();
+  DEBUG_MOTORS("init release");
   motor(MOTOR_1_PINS, MOTOR_GO_BCK);
   motor(MOTOR_2_PINS, MOTOR_GO_BCK);
 }
 
 void motors_stop() {
-  Serial.println("motors stop");
+  DEBUG_MOTORS("motors stop");
   motor(MOTOR_1_PINS, MOTOR_STOP);
   motor(MOTOR_2_PINS, MOTOR_STOP);
 }
 
 void motors_init() {
   motors_init_release();
-  delay(5000);
+  delay(2000);
   motors_stop();
 }
 
@@ -176,7 +204,7 @@ void motors_loop() {
   }
   // is it time to stop ?
   if (millis() - actionStartTime > timing) {
-    Serial.println("action done -> stop the motors");
+    DEBUG_MOTORS("action done -> stop the motors");
     motors_stop();
     switch (state) {
       case E_STATE_BRAKING:

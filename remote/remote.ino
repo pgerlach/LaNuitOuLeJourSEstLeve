@@ -16,25 +16,21 @@
 #define ID_MODULE_2 "mod2"
 
 // remote
-#define PIN_BTN_MODULE_1_BRAKE (2)
-#define PIN_BTN_MODULE_1_FREE  (3)
-#define PIN_BTN_MODULE_2_BRAKE (4)
-#define PIN_BTN_MODULE_2_FREE  (5)
+#define PIN_PUSHBTN_MODULE_1 (2)
+#define PIN_PUSHBTN_MODULE_2 (3)
 
-Button btn_module_1_brake(PIN_BTN_MODULE_1_BRAKE);
-Button btn_module_1_free(PIN_BTN_MODULE_1_FREE);
-Button btn_module_2_brake(PIN_BTN_MODULE_2_BRAKE);
-Button btn_module_2_free(PIN_BTN_MODULE_2_FREE);
+Button btn_module_1(PIN_PUSHBTN_MODULE_1);
+Button btn_module_2(PIN_PUSHBTN_MODULE_2);
 
 void setup(){
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   // init nRF24L01
   Mirf.cePin = PIN_NRF24L01_CE;
   Mirf.csnPin = PIN_NRF24L01_CS;
   Mirf.spi = &MirfHardwareSpi;
   Mirf.init();
-  
+
   // telc -> telecommand
   Mirf.setRADDR((byte *)ID_REMOTE);
 
@@ -52,47 +48,31 @@ void setup(){
   Mirf.config();
 
   // start listening to buttons
-  btn_module_1_brake.begin();
-  btn_module_1_free.begin();
-
-  btn_module_2_brake.begin();
-  btn_module_2_free.begin();
+  btn_module_1.begin();
+  btn_module_2.begin();
 
   Serial.println("WELCOME TO THE REMOTE LOGS"); 
 }
 
+long lastAction = 0;
+
 void loop() {
-  byte msg = 0x00;
+  // update every second
+  if (millis() - lastAction > 1000) {
+    lastAction = millis();
 
-  if (btn_module_1_brake.pressed()) {
-    Serial.println("module 1 brake");
+    byte msg_mod_1 = btn_module_1.read() ? MSG_BRAKE : MSG_FREE;
+    byte msg_mod_2 = btn_module_2.read() ? MSG_BRAKE : MSG_FREE;
+
+    Serial.print((char)msg_mod_1);
+    Serial.println((char)msg_mod_2);
+
     Mirf.setTADDR((byte *)ID_MODULE_1);
-    msg = MSG_BRAKE;
-    Mirf.send((byte *)&msg);
+    Mirf.send((byte *)&msg_mod_1);
     while(Mirf.isSending()) {}
-  }
 
-  if (btn_module_1_free.pressed()) {
-    Serial.println("module 1 free");
-    Mirf.setTADDR((byte *)ID_MODULE_1);
-    msg = MSG_FREE;
-    Mirf.send((byte *)&msg);
-    while(Mirf.isSending()) {}
-  }
-
-  if (btn_module_2_brake.pressed()) {
-    Serial.println("module 2 brake");
     Mirf.setTADDR((byte *)ID_MODULE_2);
-    msg = MSG_BRAKE;
-    Mirf.send((byte *)&msg);
-    while(Mirf.isSending()) {}
-  }
-
-  if (btn_module_2_free.pressed()) {
-    Serial.println("module 2 free");
-    Mirf.setTADDR((byte *)ID_MODULE_2);
-    msg = MSG_FREE;
-    Mirf.send((byte *)&msg);
+    Mirf.send((byte *)&msg_mod_2);
     while(Mirf.isSending()) {}
   }
 
