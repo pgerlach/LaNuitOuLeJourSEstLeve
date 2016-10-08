@@ -1,7 +1,5 @@
 #include <SPI.h>
-#include <Mirf.h>
-#include <nRF24L01.h>
-#include <MirfHardwareSpiDriver.h>
+#include <RF24.h>
 #include <Button.h>
 
 // common
@@ -22,30 +20,14 @@
 Button btn_module_1(PIN_PUSHBTN_MODULE_1);
 Button btn_module_2(PIN_PUSHBTN_MODULE_2);
 
+RF24 radio(PIN_NRF24L01_CE,PIN_NRF24L01_CS);
+
 void setup(){
   Serial.begin(115200);
 
-  // init nRF24L01
-  Mirf.cePin = PIN_NRF24L01_CE;
-  Mirf.csnPin = PIN_NRF24L01_CS;
-  Mirf.spi = &MirfHardwareSpi;
-  Mirf.init();
-
-  // telc -> telecommand
-  Mirf.setRADDR((byte *)ID_REMOTE);
-
-  // not much info to send
-  Mirf.payload = sizeof(byte);
-
-  /*
-   * To change channel:
-   * 
-   * Mirf.channel = 10;
-   *
-   * NB: Make sure channel is legal in your area.
-   */
-   
-  Mirf.config();
+  radio.begin();
+  radio.setPALevel(RF24_PA_LOW);
+  radio.stopListening();
 
   // start listening to buttons
   btn_module_1.begin();
@@ -67,13 +49,11 @@ void loop() {
     Serial.print((char)msg_mod_1);
     Serial.println((char)msg_mod_2);
 
-    Mirf.setTADDR((byte *)ID_MODULE_1);
-    Mirf.send((byte *)&msg_mod_1);
-    while(Mirf.isSending()) {}
+    radio.openWritingPipe((byte *)ID_MODULE_1);
+    radio.write((byte *)&msg_mod_1, sizeof(byte));
 
-    Mirf.setTADDR((byte *)ID_MODULE_2);
-    Mirf.send((byte *)&msg_mod_2);
-    while(Mirf.isSending()) {}
+    radio.openWritingPipe((byte *)ID_MODULE_2);
+    radio.write((byte *)&msg_mod_2, sizeof(byte));
   }
 
 }

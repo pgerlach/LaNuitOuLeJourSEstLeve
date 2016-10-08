@@ -1,7 +1,5 @@
 #include <SPI.h>
-#include <Mirf.h>
-#include <nRF24L01.h>
-#include <MirfHardwareSpiDriver.h>
+#include <RF24.h>
 
 // timings
 #define BRAKE_TIMING (500)
@@ -46,28 +44,15 @@ long actionStartTime = millis();
 
 long lastMessageDisplayTimer = 0;
 
+RF24 radio(PIN_NRF24L01_CE,PIN_NRF24L01_CS);
+
 void setup(){
   Serial.begin(115200);
 
-  // init nRF24L01
-  Mirf.cePin = PIN_NRF24L01_CE;
-  Mirf.csnPin = PIN_NRF24L01_CS;
-  Mirf.spi = &MirfHardwareSpi;
-  Mirf.init();
-
-  // this is module 1
-  Mirf.setRADDR((byte *)ID_MODULE_1);
-
-  // messages are only 1 byte
-  Mirf.payload = sizeof(byte);
-
-  /*
-   * To change channel:
-   * Mirf.channel = 10;
-   */
-   
-  Mirf.config();
-
+  radio.begin();
+  radio.setPALevel(RF24_PA_LOW);
+  radio.openReadingPipe(1,(byte*)ID_MODULE_1);
+ 
   // setup PINS
   for (int i=0; i<3; i++) {
     pinMode(MOTOR_1_PINS[i], OUTPUT);
@@ -81,17 +66,18 @@ void setup(){
 
   lastMessageDisplayTimer = millis();
 
+  radio.startListening();
   Serial.println("WELCOME TO THE MODULE 1 LOGS");
 }
 
 int loopsWithNoActions = 0;
 
 void loop() {
-  if (Mirf.dataReady()) {
+  if (radio.available()) {
     digitalWrite(PIN_LED_NO_MSG, LOW);
     lastMessageDisplayTimer = millis();
     byte msg;
-    Mirf.getData((byte *) &msg);
+    radio.read(&msg, sizeof(byte));
 
     actionStartTime = millis();
     switch (msg) {
@@ -111,10 +97,7 @@ void loop() {
   } else {
     if (millis() - lastMessageDisplayTimer > 1500) {
       digitalWrite(PIN_LED_NO_MSG, HIGH);
-      byte chRegisterValue = 0;
-      Mirf.readRegister(RF_CH, &chRegisterValue, 1);
       DEBUG_MSGS("1.5 second w/ no data");
-      DEBUG_MSGS((int)chRegisterValue);
       lastMessageDisplayTimer = millis();
     }
   }
