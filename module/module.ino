@@ -96,7 +96,6 @@ void loop() {
     byte msg;
     radio.read(&msg, sizeof(byte));
 
-    actionStartTime = millis();
     switch (msg) {
       case MSG_BRAKE:
         DEBUG_MSGS("msg brake");
@@ -144,6 +143,7 @@ void msg_brake() {
     case E_STATE_FREE:
     case E_STATE_RELEASING:
       // do start braking
+      actionStartTime = millis();
       state = E_STATE_BRAKING;
       motors_init_brake();
       break;
@@ -158,6 +158,7 @@ void msg_release() {
       break;
     case E_STATE_BRAKING:
     case E_STATE_STOPPED:
+      actionStartTime = millis();
       state = E_STATE_RELEASING;
       motors_init_release();
       break;
