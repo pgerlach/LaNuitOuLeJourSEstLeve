@@ -112,9 +112,9 @@ void loop() {
         break;
     }
   } else {
-    if (millis() - lastMessageDisplayTimer > 1500) {
+    if (millis() - lastMessageDisplayTimer > 500) {
       digitalWrite(PIN_LED_NO_MSG, HIGH);
-      DEBUG_MSGS("1.5 second w/ no data");
+      DEBUG_MSGS("500 ms w/ no data");
       lastMessageDisplayTimer = millis();
     }
   }

@@ -40,7 +40,7 @@ long lastAction = 0;
 
 void loop() {
   // update every second
-  if (millis() - lastAction > 1000) {
+  if (millis() - lastAction > 300) {
     lastAction = millis();
 
     byte msg_mod_1 = btn_module_1.read() ? MSG_BRAKE : MSG_FREE;
