@@ -32,7 +32,8 @@ const int PIN_IN4 = 7;
 const int MOTOR_1_PINS[] = { PIN_ENA, PIN_IN1, PIN_IN2 };
 const int MOTOR_2_PINS[] = { PIN_ENB, PIN_IN4, PIN_IN3 };
 
-const int PIN_LED_NO_MSG = A0;
+const int PIN_LED_RF_OK_GND = A0;
+const int PIN_LED_RF_OK = A1;
 
 enum e_state {
   E_STATE_FREE,
@@ -47,6 +48,7 @@ long lastMessageDisplayTimer = 0;
 
 RF24 radio(PIN_NRF24L01_CE,PIN_NRF24L01_CS);
 
+// same structure as in 'set_eeprom_modX'
 struct s_module_eeprom_data {
   byte magic = 0x42; // MUST be 0x42
   char id[5];  // 0 terminated string
@@ -56,6 +58,7 @@ struct s_module_eeprom_data {
 void setup(){
   Serial.begin(115200);
 
+  // read the module id (set by running set_eeprom_modX' code)
   memset(&eepromData, 0, sizeof(eepromData));
   EEPROM.get(0, eepromData);
   if (eepromData.magic != 0x42) {
@@ -66,6 +69,7 @@ void setup(){
   }
   Serial.print("module id: "); Serial.println(eepromData.id);
 
+  // begin listening on the radio
   radio.begin();
   radio.setPALevel(RF24_PA_LOW);
   radio.openReadingPipe(1,(byte*)eepromData.id);
@@ -76,8 +80,12 @@ void setup(){
     pinMode(MOTOR_2_PINS[i], OUTPUT);
   }
   motors_init();
-  pinMode(PIN_LED_NO_MSG, OUTPUT);
-  digitalWrite(PIN_LED_NO_MSG, LOW);
+
+  // debug LED
+  pinMode(PIN_LED_RF_OK, OUTPUT);
+  pinMode(PIN_LED_RF_OK_GND, OUTPUT);
+  digitalWrite(PIN_LED_RF_OK, LOW);
+  digitalWrite(PIN_LED_RF_OK_GND, LOW);
 
   state = E_STATE_FREE;
 
@@ -87,11 +95,9 @@ void setup(){
   Serial.println("WELCOME TO THE MODULE 1 LOGS");
 }
 
-int loopsWithNoActions = 0;
-
 void loop() {
   if (radio.available()) {
-    digitalWrite(PIN_LED_NO_MSG, LOW);
+    digitalWrite(PIN_LED_RF_OK, HIGH);
     lastMessageDisplayTimer = millis();
     byte msg;
     radio.read(&msg, sizeof(byte));
@@ -112,7 +118,7 @@ void loop() {
     }
   } else {
     if (millis() - lastMessageDisplayTimer > 500) {
-      digitalWrite(PIN_LED_NO_MSG, HIGH);
+      digitalWrite(PIN_LED_RF_OK, LOW);
       DEBUG_MSGS("500 ms w/ no data");
       lastMessageDisplayTimer = millis();
     }
