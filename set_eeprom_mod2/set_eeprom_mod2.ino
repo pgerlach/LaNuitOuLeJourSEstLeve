@@ -21,7 +21,7 @@ void setup() {
   memset(&eepromDataRead, 0, sizeof(eepromDataRead));
   eepromDataRead.magic = 0x00;
   EEPROM.get(0, eepromDataRead);
-  if (eepromDataRead.magic != 0x42 || strcmp(eepromDataRead.magic, ID)) {
+  if (eepromDataRead.magic != 0x42 || strcmp(eepromDataRead.id, ID)) {
     Serial.println("FAILURE");
   } else {
     Serial.println("SUCCESS !");
