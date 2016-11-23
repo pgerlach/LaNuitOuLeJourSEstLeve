@@ -3,8 +3,11 @@
 #include <EEPROM.h>
 
 // timings
-#define BRAKE_TIMING (500)
-#define RELEASE_TIMING (500)
+#define BRAKE_TIMING (217)
+#define RELEASE_TIMING (BRAKE_TIMING + 200)
+
+// RF channel. 76 is default in the library, should be free from interferences
+#define RF_CHANNEL (76)
 
 // common
 #define PIN_NRF24L01_CS (9)
@@ -17,8 +20,9 @@
 #define ID_MODULE_1 "mod1"
 #define ID_MODULE_2 "mod2"
 
-#define DEBUG_MOTORS(msg) Serial.println(msg)
-#define DEBUG_MSGS(msg) Serial.println(msg)
+#define DEBUG_MOTORS(msg) // Serial.println(msg)
+#define DEBUG_MSGS(msg)  Serial.println(msg)
+#define DEBUG_MSGS_HEX(msg) // Serial.println(msg, HEX)
 
 
 // module
@@ -34,6 +38,8 @@ const int MOTOR_2_PINS[] = { PIN_ENB, PIN_IN4, PIN_IN3 };
 
 const int PIN_LED_RF_OK_GND = A0;
 const int PIN_LED_RF_OK = A1;
+const int PIN_LED_MOTOR_STATE_GND = A4;
+const int PIN_LED_MOTOR_STATE = A5;
 
 enum e_state {
   E_STATE_FREE,
@@ -68,11 +74,6 @@ void setup(){
     while (true) ;
   }
   Serial.print("module id: "); Serial.println(eepromData.id);
-
-  // begin listening on the radio
-  radio.begin();
-  radio.setPALevel(RF24_PA_LOW);
-  radio.openReadingPipe(1,(byte*)eepromData.id);
  
   // setup PINS
   for (int i=0; i<3; i++) {
@@ -81,45 +82,75 @@ void setup(){
   }
   motors_init();
 
-  // debug LED
-  pinMode(PIN_LED_RF_OK, OUTPUT);
+  // debug LEDs
   pinMode(PIN_LED_RF_OK_GND, OUTPUT);
-  digitalWrite(PIN_LED_RF_OK, LOW);
+  pinMode(PIN_LED_RF_OK, OUTPUT);
+  pinMode(PIN_LED_MOTOR_STATE_GND, OUTPUT);
+  pinMode(PIN_LED_MOTOR_STATE, OUTPUT);
   digitalWrite(PIN_LED_RF_OK_GND, LOW);
+  digitalWrite(PIN_LED_RF_OK, LOW);
+  digitalWrite(PIN_LED_MOTOR_STATE_GND, LOW);
+  digitalWrite(PIN_LED_MOTOR_STATE, LOW);
 
   state = E_STATE_FREE;
 
   lastMessageDisplayTimer = millis();
 
+  radio_init();
+
+  Serial.println("WELCOME TO THE MODULE LOGS");
+}
+
+// (re)init the radio and begin listening
+void radio_init() {
+  radio.begin();
+  radio.setChannel(RF_CHANNEL);
+  radio.setPALevel(RF24_PA_LOW);
+  radio.openReadingPipe(1,(byte*)eepromData.id);
   radio.startListening();
-  Serial.println("WELCOME TO THE MODULE 1 LOGS");
+}
+
+/*
+ * Test if the radio is still configured or if it has been reset / lost / ...
+ */
+bool checkRadioStillConfigured() {
+  return (radio.getChannel() == RF_CHANNEL);
 }
 
 void loop() {
   if (radio.available()) {
-    digitalWrite(PIN_LED_RF_OK, HIGH);
-    lastMessageDisplayTimer = millis();
-    byte msg;
+    byte msg = 0x00;
     radio.read(&msg, sizeof(byte));
-
     switch (msg) {
       case MSG_BRAKE:
+        digitalWrite(PIN_LED_RF_OK, HIGH);
+        lastMessageDisplayTimer = millis();
         DEBUG_MSGS("msg brake");
+        DEBUG_MSGS_HEX(msg);
         msg_brake();
         break;
       case MSG_FREE:
+        digitalWrite(PIN_LED_RF_OK, HIGH);
+        lastMessageDisplayTimer = millis();
         DEBUG_MSGS("msg release");
+        DEBUG_MSGS_HEX(msg);
         msg_release();
         break;
       default:
+        digitalWrite(PIN_LED_RF_OK, LOW);
         DEBUG_MSGS("msg UNKNOWN");
-        DEBUG_MSGS((char)msg);
+        DEBUG_MSGS_HEX(msg);
+        radio_init();
         break;
     }
   } else {
     if (millis() - lastMessageDisplayTimer > 500) {
       digitalWrite(PIN_LED_RF_OK, LOW);
       DEBUG_MSGS("500 ms w/ no data");
+      if (!checkRadioStillConfigured()) {
+        DEBUG_MSGS("radio seems lost -> reset it");
+        radio_init();
+      }
       lastMessageDisplayTimer = millis();
     }
   }
@@ -192,14 +223,16 @@ void motors_stop() {
 
 void motors_init() {
   motors_init_release();
-  delay(2000);
+  // should be enough to rewind whatever length the motor has been to
+  delay(RELEASE_TIMING*2);
   motors_stop();
 }
 
 void motors_loop() {
-  if (state == E_STATE_STOPPED || state == E_STATE_FREE) {
-    return ;
-  }
+
+  // update motors status LED
+  digitalWrite(PIN_LED_MOTOR_STATE, (state == E_STATE_STOPPED || state == E_STATE_BRAKING) ? HIGH : LOW);
+
   long timing = 0;
   switch (state) {
     case E_STATE_BRAKING:
