@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include <RF24.h>
 #include <EEPROM.h>
+#include <Button.h>
 
 // timings
 #define BRAKE_TIMING (217)
@@ -38,8 +39,8 @@ const int MOTOR_2_PINS[] = { PIN_ENB, PIN_IN4, PIN_IN3 };
 
 const int PIN_LED_RF_OK_GND = A0;
 const int PIN_LED_RF_OK = A1;
-const int PIN_LED_MOTOR_STATE_GND = A4;
-const int PIN_LED_MOTOR_STATE = A5;
+const int PIN_BTN_MANUALTAKEOVER_GND = A4;
+const int PIN_BTN_MANUALTAKEOVER = A5;
 
 enum e_state {
   E_STATE_FREE,
@@ -53,12 +54,15 @@ long actionStartTime = millis();
 long lastMessageDisplayTimer = 0;
 
 RF24 radio(PIN_NRF24L01_CE,PIN_NRF24L01_CS);
+Button btn_manualTakeover(PIN_BTN_MANUALTAKEOVER);
 
 // same structure as in 'set_eeprom_modX'
 struct s_module_eeprom_data {
   byte magic = 0x42; // MUST be 0x42
   char id[5];  // 0 terminated string
 } eepromData;
+
+bool manualTakeover_enabled = false;
 
 
 void setup(){
@@ -85,12 +89,16 @@ void setup(){
   // debug LEDs
   pinMode(PIN_LED_RF_OK_GND, OUTPUT);
   pinMode(PIN_LED_RF_OK, OUTPUT);
-  pinMode(PIN_LED_MOTOR_STATE_GND, OUTPUT);
-  pinMode(PIN_LED_MOTOR_STATE, OUTPUT);
   digitalWrite(PIN_LED_RF_OK_GND, LOW);
   digitalWrite(PIN_LED_RF_OK, LOW);
-  digitalWrite(PIN_LED_MOTOR_STATE_GND, LOW);
-  digitalWrite(PIN_LED_MOTOR_STATE, LOW);
+
+  // manual takeover
+  pinMode(PIN_BTN_MANUALTAKEOVER_GND, OUTPUT);
+  digitalWrite(PIN_BTN_MANUALTAKEOVER_GND, LOW);
+  btn_manualTakeover.begin();
+  // init hasChanged
+  btn_manualTakeover.read();
+  btn_manualTakeover.has_changed();
 
   state = E_STATE_FREE;
 
@@ -117,7 +125,15 @@ bool checkRadioStillConfigured() {
   return (radio.getChannel() == RF_CHANNEL);
 }
 
-void loop() {
+void manualControl() {
+  if (btn_manualTakeover.read()) {
+    msg_release();
+  } else {
+    msg_brake();
+  }
+}
+
+void rfControl() {
   if (radio.available()) {
     byte msg = 0x00;
     radio.read(&msg, sizeof(byte));
@@ -154,7 +170,21 @@ void loop() {
       lastMessageDisplayTimer = millis();
     }
   }
+}
 
+void loop() {
+  if (manualTakeover_enabled) {
+    manualControl();
+  } else {
+    btn_manualTakeover.read();
+    if (btn_manualTakeover.has_changed()) {
+      DEBUG_MSGS("MANUAL TAKEOVER");
+      DEBUG_MSGS(btn_manualTakeover.read());
+      manualTakeover_enabled = true;
+      return;
+    }
+    rfControl();
+  }
   motors_loop();
 }
 
@@ -229,9 +259,6 @@ void motors_init() {
 }
 
 void motors_loop() {
-
-  // update motors status LED
-  digitalWrite(PIN_LED_MOTOR_STATE, (state == E_STATE_STOPPED || state == E_STATE_BRAKING) ? HIGH : LOW);
 
   long timing = 0;
   switch (state) {
