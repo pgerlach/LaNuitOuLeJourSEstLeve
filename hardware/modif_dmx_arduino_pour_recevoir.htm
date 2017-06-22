@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<!-- saved from url=(0130)https://web.archive.org/web/20160220010638/https://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive -->
+<html lang="en" class=" js no-touch"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript" src="https://web.archive.org/static/js/analytics.js?v=1497494797.0" charset="utf-8"></script>
+
+<script type="text/javascript">archive_analytics.values.service='wb';archive_analytics.values.server_name='wwwb-app14.us.archive.org';archive_analytics.values.server_ms=462;</script>
+<script type="text/javascript" src="./modif_dmx_arduino_pour_recevoir_files/wbhack.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+__wbhack.init('');
+</script>
+<link rel="stylesheet" type="text/css" href="./modif_dmx_arduino_pour_recevoir_files/banner-styles.css">
+<link rel="stylesheet" type="text/css" href="./modif_dmx_arduino_pour_recevoir_files/iconochive.css">
+
+<!-- End Wayback Rewrite JS Include --><script>var __pbpa = true;</script><script>var translated_warning_string = 'Warning: Never enter your Tumblr password unless \u201chttps://www.tumblr.com/login\u201d\x0ais the address in your web browser.\x0a\x0aYou should also see a green \u201cTumblr, Inc.\u201d identification in the address bar.\x0a\x0aSpammers and other bad guys use fake forms to steal passwords.\x0a\x0aTumblr will never ask you to log in from a user\u2019s blog.\x0a\x0aAre you absolutely sure you want to continue?';</script><script type="text/javascript" language="javascript" src="./modif_dmx_arduino_pour_recevoir_files/pre_tumblelog.js"></script>
+
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6 lte-ie8"> <![endif]-->
+<!--[if IE 7 ]> <html lang="en" class="no-js ie7 lte-ie8"> <![endif]-->
+<!--[if IE 8 ]> <html lang="en" class="no-js ie8 lte-ie8"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<script type="text/javascript" src="./modif_dmx_arduino_pour_recevoir_files/timestamp.js" charset="utf-8"></script>
+<script type="text/javascript" src="./modif_dmx_arduino_pour_recevoir_files/graph-calc.js" charset="utf-8"></script>
+<script type="text/javascript" src="./modif_dmx_arduino_pour_recevoir_files/auto-complete.js" charset="utf-8"></script>
+<script type="text/javascript" src="./modif_dmx_arduino_pour_recevoir_files/toolbar.js" charset="utf-8"></script>
+
+<style type="text/css">
+body {
+  margin-top:0 !important;
+  padding-top:0 !important;
+  min-width:800px !important;
+}
+.wb-autocomplete-suggestions {
+    text-align: left; cursor: default; border: 1px solid #ccc; border-top: 0; background: #fff; box-shadow: -1px 1px 3px rgba(0,0,0,.1);
+    position: absolute; display: none; z-index: 2147483647; max-height: 254px; overflow: hidden; overflow-y: auto; box-sizing: border-box;
+}
+.wb-autocomplete-suggestion { position: relative; padding: 0 .6em; line-height: 23px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.02em; color: #333; }
+.wb-autocomplete-suggestion b { font-weight: bold; }
+.wb-autocomplete-suggestion.selected { background: #f0f0f0; }
+</style>
+<script type="text/javascript" async="" src="./modif_dmx_arduino_pour_recevoir_files/embed.js"></script><style>.tmblr-iframe{position:absolute}.tmblr-iframe.hide{display:none}.tmblr-pano-lightbox-container .tmblr-iframe--pano-lightbox{z-index:8675309;position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;display:none}.tmblr-pano-lightbox-container .tmblr-iframe-preloader-container{z-index:8675310;position:fixed;bottom:0;width:100%;height:100%;background:rgba(0,0,0,.92)}.tmblr-pano-lightbox-container .tmblr-pano-lightbox{display:block}.tmblr-pano-lightbox-container .tmblr-pano-lightbox--preloading{display:none}.tmblr-pano-lightbox-container .tmblr-knight-rider-loader{line-height:0;white-space:nowrap;width:78px;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-moz-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%)}.tmblr-pano-lightbox-container .tmblr-knight-rider-loader .tmblr-knight-rider-bar{width:20px;height:20px;margin-left:3px;margin-right:3px;border-radius:5px;opacity:.5;background-color:#d9d9d9;display:inline-block;-webkit-animation:knight-rider-oscillate ease-in-out 300ms infinite alternate;animation:knight-rider-oscillate ease-in-out 300ms infinite alternate}.tmblr-pano-lightbox-container .tmblr-knight-rider-loader .tmblr-knight-rider-bar:nth-child(1){-webkit-animation-delay:-200ms;animation-delay:-200ms}.tmblr-pano-lightbox-container .tmblr-knight-rider-loader .tmblr-knight-rider-bar:nth-child(2){-webkit-animation-delay:-100ms;animation-delay:-100ms}@-webkit-keyframes knight-rider-oscillate{0%{opacity:.5;-webkit-transform:scaleY(1);transform:scaleY(1)}100%{opacity:1;-webkit-transform:scaleY(1.4);transform:scaleY(1.4)}}@keyframes knight-rider-oscillate{0%{opacity:.5;-webkit-transform:scaleY(1);transform:scaleY(1)}100%{opacity:1;-webkit-transform:scaleY(1.4);transform:scaleY(1.4)}}.tmblr-iframe--controls-phone-container{padding-top:43px}.tmblr-iframe--controls-phone-container .t-logo{display:none}.tmblr-iframe--controls,.tmblr-iframe--mobile-logged-in-controls{position:fixed}.tmblr-iframe--controls.iframe-controls--desktop,.tmblr-iframe--mobile-logged-in-controls.iframe-controls--desktop{right:0;top:0;width:40%;min-width:200px;height:36px;z-index:100}.tmblr-iframe--controls.iframe-controls--phone-mobile,.tmblr-iframe--mobile-logged-in-controls.iframe-controls--phone-mobile{left:0;top:0;width:100%;height:44px;z-index:10;padding-right:8px}.tmblr-iframe--controls.iframe-controls--tablet-mobile,.tmblr-iframe--mobile-logged-in-controls.iframe-controls--tablet-mobile{right:0;top:0;width:235px;height:36px;z-index:2147483646}.tmblr-iframe--desktop-logged-in-controls{position:fixed}.tmblr-iframe--desktop-logged-in-controls.iframe-controls--desktop{right:0;top:0;z-index:100}.tmblr-iframe--follow-teaser{position:fixed;bottom:0;right:0;z-index:100;display:none}.tmblr-iframe--follow-teaser.open{display:block}.tmblr-lightbox{position:fixed;top:0;bottom:0;left:0;right:0;z-index:8675309;overflow:hidden;background-color:rgba(17,17,17,.92)}.tmblr-lightbox .vignette{position:absolute;width:100%;height:100%;left:0;top:0;right:0;bottom:0;z-index:8675308;background-size:100% 100%}.tmblr-lightbox .lightbox-image-container{position:absolute;z-index:8675310;cursor:pointer}.tmblr-lightbox .lightbox-image-container.single-image{cursor:default}.tmblr-lightbox .lightbox-image{border-radius:3px;box-shadow:0 4px 30px #000;border-width:0;background-color:transparent}.tmblr-lightbox .lightbox-image.hide{display:none}.tmblr-lightbox .lightbox-image.placeholder{background-color:rgba(255,255,255,.05)}.tmblr-lightbox .lightbox-caption{position:absolute;text-align:center;font-family:"Helvetica Neue","HelveticaNeue",Helvetica,Arial,sans-serif;font-size:17px;font-weight:700;color:#fff;padding-top:20px;text-shadow:0 4px 30px #000;display:inline-block;text-rendering:optimizeLegibility}.tmblr-lightbox .lightbox-caption.hide{display:none}.hidden-body{position:relative;left:-99999px;overflow:hidden;background-color:#000}.hidden-body .show-mobile-lightbox{position:fixed;overflow:hidden;width:100%;top:0;left:0;right:0;bottom:0;z-index:8675309}.tmblr-iframe--init{opacity:0;width:0;height:0;z-index:-1;pointer-events:none}</style></head><body class="content-700 scale-images singular "><div class="ui_dialog_lock" style="display: none;"></div><iframe src="./modif_dmx_arduino_pour_recevoir_files/login_check.html" width="0" height="0" frameborder="0" scrolling="no" name="init" class="tmblr-iframe tmblr-iframe--init"></iframe><div id="wm-ipp" lang="en" style="display: none; direction: ltr;" class="">
+<div style="position:fixed;left:0;top:0;width:100%!important">
+<div id="wm-ipp-inside">
+  <table style="width:100%;">
+    <tbody>
+      <tr>
+	<td id="wm-logo">
+	  <a href="https://web.archive.org/web/" title="Wayback Machine home page"><img src="./modif_dmx_arduino_pour_recevoir_files/wayback-toolbar-logo.png" alt="Wayback Machine" width="110" height="39" border="0"></a>
+	</td>
+	<td class="c">
+	  <table style="margin:0 auto;">
+	    <tbody>
+	      <tr>
+		<td class="u" colspan="2">
+		  <form target="_top" method="get" action="https://web.archive.org/web/submit" name="wmtb" id="wmtb"><input type="text" name="url" id="wmtbURL" value="https://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive" style="width:400px;" onfocus="this.focus();this.select();" autocomplete="off"><input type="hidden" name="type" value="replay"><input type="hidden" name="date" value="20160220010638"><input type="submit" value="Go"></form>
+		</td>
+		<td class="n" rowspan="2">
+		  <table>
+		    <tbody>
+		      <!-- NEXT/PREV MONTH NAV AND MONTH INDICATOR -->
+		      <tr class="m">
+			<td class="b" nowrap="nowrap"><a href="https://web.archive.org/web/20150814081606/http://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive" title="14 Aug 2015"><strong>Aug</strong></a></td>
+			<td class="c" id="displayMonthEl" title="You are here: 01:06:38 Feb 20, 2016">Feb</td>
+			<td class="f" nowrap="nowrap"><a href="https://web.archive.org/web/20160322204607/http://ericbarch.com:80/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive" title="22 Mar 2016"><strong>Mar</strong></a></td>
+		      </tr>
+		      <!-- NEXT/PREV CAPTURE NAV AND DAY OF MONTH INDICATOR -->
+		      <tr class="d">
+			<td class="b" nowrap="nowrap"><a href="https://web.archive.org/web/20150814081606/http://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive" title="08:16:06 Aug 14, 2015"><img src="./modif_dmx_arduino_pour_recevoir_files/wm_tb_prv_on.png" alt="Previous capture" width="14" height="16" border="0"></a></td>
+			<td class="c" id="displayDayEl" style="width:34px;font-size:24px;" title="You are here: 01:06:38 Feb 20, 2016">20</td>
+			<td class="f" nowrap="nowrap"><a href="https://web.archive.org/web/20160322204607/http://ericbarch.com:80/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive" title="20:46:07 Mar 22, 2016"><img src="./modif_dmx_arduino_pour_recevoir_files/wm_tb_nxt_on.png" alt="Next capture" width="14" height="16" border="0"></a></td>
+		      </tr>
+		      <!-- NEXT/PREV YEAR NAV AND YEAR INDICATOR -->
+		      <tr class="y">
+			<td class="b" nowrap="nowrap"><a href="https://web.archive.org/web/20150213071818/http://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive" title="13 Feb 2015"><strong>2015</strong></a></td>
+			<td class="c" id="displayYearEl" title="You are here: 01:06:38 Feb 20, 2016">2016</td>
+			<td class="f" nowrap="nowrap">2017</td>
+		      </tr>
+		    </tbody>
+		  </table>
+		</td>
+	      </tr>
+	      <tr>
+		<td class="s">
+		  		  <div id="wm-nav-captures"><a class="t" href="https://web.archive.org/web/*/https://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive" title="See a list of every capture for this URL">9 captures</a><div class="r" title="Timespan for captures of this URL">13 Feb 2015 - 16 Feb 2017</div></div>
+		</td>
+		<td class="k">
+		  <a href="https://web.archive.org/web/19960701000000/https://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive" id="wm-graph-anchor">
+		    <div id="wm-ipp-sparkline" title="Explore captures for this URL" style="position: relative">
+		      <canvas id="wm-sparkline-canvas" width="550" height="27" border="0"></canvas>
+		    <div class="yt" style="display: none; width: 25px; height: 27px; left: 0px;"></div><div class="mt" style="display: none; width: 2px; height: 27px; left: 13px;"></div></div>
+		  </a>
+		</td>
+	      </tr>
+	    </tbody>
+	  </table>
+	</td>
+	<td class="r">
+	  <a href="https://web.archive.org/web/20160220010638/https://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive#" onclick="window.open(&#39;https://www.facebook.com/sharer/sharer.php?u=https://web.archive.org/web/20160220010638/http://ericbarch.com:80/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive&#39;, &#39;&#39;, &#39;height=400,width=600&#39;); return false;" title="Share on Facebook" style="top: 4px; right: 16px;" target="_blank"><span class="iconochive-facebook" style="color:#3b5998;font-size:160%;"></span></a>
+	  <a href="https://web.archive.org/web/20160220010638/https://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive#" onclick="window.open(&#39;https://twitter.com/intent/tweet?text=https://web.archive.org/web/20160220010638/http://ericbarch.com:80/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive&amp;via=internetarchive&#39;, &#39;&#39;, &#39;height=400,width=600&#39;); return false;" title="Share on Twitter" style="bottom:14px;right:16px;" target="_blank"><span class="iconochive-twitter" style="color:#1dcaff;font-size:160%;"></span></a>
+	  <a href="http://faq.web.archive.org/" title="Get some help using the Wayback Machine" style="bottom:14px;right:5px;padding-right:0;"><span class="iconochive-question" style="color:rgb(87,186,244);font-size:160%;"></span></a>
+	  <a href="https://web.archive.org/web/20160220010638/https://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive#close" onclick="__wm.h(event);return false;" style="top:-2px;right:0;padding-right:0;" title="Close the toolbar"><span class="iconochive-remove-circle" style="color:#888888;font-size:240%;"></span></a>
+	  <a id="wm-expand" class="wm-btn" href="https://web.archive.org/web/20160220010638/https://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive#expand" onclick="__wm.ex(event);return false;"><span class="iconochive-down-solid"></span> <span style="font-size:80%">About this capture</span></a>
+	</td>
+      </tr>
+    </tbody>
+  </table>
+    <div id="wm-capinfo" style="border-top:1px solid #777;display:none;">
+            <div style="background-color:#353535;color:#aaa;font-weight:bold;text-align:center;"><a class="wm-selector selected" href="javascript:void(0)">COLLECTED BY</a></div>
+    <div style="padding:3px;position:relative;">
+            <div style="display:inline-block;vertical-align:top;width:50%;">
+			<span class="c-logo" style="background-image:url(https://archive.org/services/img/alexacrawls);"></span>
+		Organization: <a style="color:#33f;" href="https://archive.org/details/alexacrawls" target="_new"><span class="wm-title">Alexa Crawls</span></a>
+		<div style="max-height:75px;overflow:hidden;position:relative;">
+	  <div style="position:absolute;top:0;left:0;width:100%;height:75px;background:linear-gradient(to bottom,rgba(255,255,255,0) 0%,rgba(255,255,255,0) 90%,rgba(255,255,255,255) 100%);"></div>
+	  Starting in 1996, <a href="http://www.alexa.com/">Alexa Internet</a> has been donating their crawl data to the Internet Archive.  Flowing in every day, these data are added to the <a href="http://web.archive.org/">Wayback Machine</a> after an embargo period.
+	</div>
+	      </div>
+      <div style="display:inline-block;vertical-align:top;width:49%;">
+			<span class="c-logo" style="background-image:url(https://archive.org/services/img/alexacrawls)"></span>
+		<div>Collection: <a style="color:#33f;" href="https://archive.org/details/alexacrawls" target="_new"><span class="wm-title">Alexa Crawls</span></a></div>
+		<div style="max-height:75px;overflow:hidden;position:relative;">
+	  <div style="position:absolute;top:0;left:0;width:100%;height:75px;background:linear-gradient(to bottom,rgba(255,255,255,0) 0%,rgba(255,255,255,0) 90%,rgba(255,255,255,255) 100%);"></div>
+	  Starting in 1996, <a href="http://www.alexa.com/">Alexa Internet</a> has been donating their crawl data to the Internet Archive.  Flowing in every day, these data are added to the <a href="http://web.archive.org/">Wayback Machine</a> after an embargo period.
+	</div>
+	      </div>
+    </div></div></div></div></div><script type="text/javascript">
+__wm.bt(550,27,25,2,"web","https://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive","2016-02-20",1996);
+</script><div class="wb-autocomplete-suggestions " style="left: 0px; top: 1px; width: 0px;"></div>
+<!-- END WAYBACK TOOLBAR INSERT --> <!--<![endif]-->
+<!--
+==========================================================================
+ ____                     ___       __  __
+/\  _`\  __              /\_ \     /\ \/\ \          __
+\ \ \L\ \\_\  __  _    __\//\ \    \ \ \ \ \    ___ /\_\    ___    ___
+ \ \ ,__//\ \/\ \/'\ /'__`\\ \ \    \ \ \ \ \ /' _ `\/\ \  / __`\/' _ `\
+  \ \ \/ \ \ \/>  <//\  __/ \_\ \_   \ \ \_\ \/\ \/\ \ \ \/\ \L\ \\ \/\ \
+   \ \_\  \ \_\\_/\_\ \____\/\____\   \ \_____\ \_\ \_\ \_\ \____/ \_\ \_\
+    \/_/   \/_///\/_/\/____/\/____/    \/_____/\/_/\/_/\/_/\/___/ \/_/\/_/
+==========================================================================
+   Effector v4.4.4
+   Updated: August 17, 2015
+   Website: https://www.pixelunion.net
+   Themes: http://tumblr.com/themes/by/pixelunion-themes
+==========================================================================
+-->
+
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>ericbarch(dot)com • Using the Tinkerkit Master DMX Shield to Receive...</title>
+
+  
+    <meta name="description" content="Using the Tinkerkit Master DMX Shield to Receive DMX Recently I worked on a project where I needed to receive DMX commands into an Arduino. All I had on hand was a Tinkerkit Master DMX shield. I...">
+  
+
+  <meta name="color:Background" content="#e6ebea">
+  <meta name="color:Colored Area Text" content="#fffadc">
+  <meta name="color:Colored Area Text Shadow" content="#bf4402">
+  <meta name="color:Inside Link" content="#f55b2c">
+  <meta name="color:Inside Link Hover" content="#fff7a5">
+  <meta name="color:Main Theme" content="#f55b2c">
+  <meta name="color:Outside Link" content="#f55b2c">
+  <meta name="color:Outside Link Hover" content="#131313">
+  <meta name="color:Outside Text" content="#616566">
+  <meta name="font:Inside Heading" content="Helvetica Neue, Arial, sans-serif">
+  <meta name="font:Inside Text" content="Georgia, serif">
+  <meta name="font:Outside Heading" content="Helvetica Neue, Arial, sans-serif">
+  <meta name="font:Outside Text" content="Helvetica Neue, Arial, sans-serif">
+  <meta name="image:Background" content="">
+  <meta name="image:Banner" content="">
+  <meta name="image:Large Sidebar Portrait" content="">
+  <meta name="image:Logo" content="">
+  <meta name="if:Align Top Menu Left" content="0">
+  <meta name="if:Automatic Headings" content="0">
+  <meta name="if:Blog Title in Page Header" content="0">
+  <meta name="if:Blog Title in Sidebar" content="0">
+  <meta name="if:Blog Title in Top bar" content="1">
+  <meta name="if:Centered Layout" content="1">
+  <meta name="if:Collapse Notes" content="1">
+  <meta name="if:Content Width 500" content="0">
+  <meta name="if:Content Width 600" content="0">
+  <meta name="if:Content Width 700" content="1">
+  <meta name="if:Custom Photosets" content="1">
+  <meta name="if:Fixed Background" content="0">
+  <meta name="if:Fixed Top Bar" content="1">
+  <meta name="if:Hide Sidebar" content="0">
+  <meta name="if:Infinite Scrolling" content="0">
+  <meta name="if:Invert" content="0">
+  <meta name="if:Invert Top Bar" content="0">
+  <meta name="if:Large Social Icons" content="1">
+  <meta name="if:Left Sidebar" content="0">
+  <meta name="if:Logo in Top bar" content="0">
+  <meta name="if:Fullscreen Background" content="0">
+  <meta name="if:Pages In Top Bar" content="0">
+  <meta name="if:Rounded Post Corners" content="0">
+  <meta name="if:Scale Images" content="1">
+  <meta name="if:Search Box In Sidebar" content="0">
+  <meta name="if:Show About Heading" content="1">
+  <meta name="if:Show Blogs I Follow" content="0">
+  <meta name="if:Show Description" content="1">
+  <meta name="if:Show Group Blog Info" content="0">
+  <meta name="if:Show Instagram" content="0">
+  <meta name="if:Show Likes" content="0">
+  <meta name="if:Show Likes in Sidebar" content="0">
+  <meta name="if:Show Pages Heading" content="1">
+  <meta name="if:Show Portrait" content="0">
+  <meta name="if:Show Random Post Icon" content="0">
+  <meta name="if:Show Social Icons Widget" content="0">
+  <meta name="if:Show Tweets" content="1">
+  <meta name="if:Show Twitter Profile" content="1">
+  <meta name="if:Top Menu With Labels" content="0">
+  <meta name="text:Behance Username" content="">
+  <meta name="text:Cargo URL" content="">
+  <meta name="text:Copyright Text" content="">
+  <meta name="text:Default Search Text" content="Search">
+  <meta name="text:Delicious Username" content="">
+  <meta name="text:Disqus Shortname" content="">
+  <meta name="text:Dribbble Username" content="">
+  <meta name="text:FFFFound Username" content="">
+  <meta name="text:Facebook Username" content="">
+  <meta name="text:Flickr Username" content="">
+  <meta name="text:Forrst Username" content="">
+  <meta name="text:Foursquare Username" content="">
+  <meta name="text:GetClicky Site ID" content="">
+  <meta name="text:Google Analytics Web Property ID" content="">
+  <meta name="text:Google URL" content="">
+  <meta name="text:Grooveshark Username" content="">
+  <meta name="text:Instagram Username" content="">
+  <meta name="text:Instagram Heading" content="Instagram">
+  <meta name="text:Instagram Access Token" content="">
+  <meta name="text:Instagram Count Max 4" content="4">
+  <meta name="text:Lastfm Username" content="">
+  <meta name="text:Liked Posts Heading" content="I Dig These Posts">
+  <meta name="text:Linkedin Profile URL" content="">
+  <meta name="text:Myspace Friend ID" content="">
+  <meta name="text:Num Tweets Max 4" content="4">
+  <meta name="text:Pinboard Username" content="">
+  <meta name="text:Pinterest Username" content="">
+  <meta name="text:Rdio Username" content="">
+  <meta name="text:Rows of Followed Avatars" content="3">
+  <meta name="text:Skype Username" content="">
+  <meta name="text:Social Icons Heading" content="Me, Elsewhere">
+  <meta name="text:Soundcloud Username" content="">
+  <meta name="text:Spotify Username" content="">
+  <meta name="text:Tagline" content="">
+  <meta name="text:Twitter Heading" content="Twitter">
+  <meta name="text:Twitter Username" content="">
+  <meta name="text:Vimeo Username" content="">
+  <meta name="text:Xbox Live Profile URL" content="">
+  <meta name="text:Youtube Username" content="">
+  <meta name="text:github Username" content="">
+
+  <!-- FACEBOOK OPEN GRAPH -->
+  <!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-->
+
+  <meta property="og:site_name" content="ericbarch(dot)com">
+
+  
+
+    <meta property="og:url" content="https://web.archive.org/web/20160220010638/http://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive">
+    <meta property="og:type" content="article">
+
+    
+      
+        <meta property="og:title" content="Using the Tinkerkit Master DMX Shield to Receive DMX">
+        <meta property="og:description" content="Recently I worked on a project where I needed to receive DMX commands into an Arduino. All I had on hand was a Tinkerkit Master DMX shield.
+
+ I wasn’t able to find a whole lot of documentation on how to read DMX with the Tinkerkit shield, as the shield is primarily designed for transmitting. After digging around a bit on the net, I was able to make it work.
+
+
+ DMXSerial seemed to be a solid library that I wanted to use in my project. DMXSerial uses the hardware serial port on the Arduino to ensure proper timing.
+
+
+ To make the Master DMX shield work with DMXSerial, you’ll need to flip the two resistors on the sheild labeled TX-Select and RX-Select. This will cause DMX data to be transmitted on the Arduino’s TX/RX UART pins (watch out, you won’t be able to load code with the shield on!). DE-Enable then needs to be connected to GND. This can be done by connecting the DE-Enable pad directly to the GND pin on the RE-ENABLE jumper (bypassing the resistor).
+
+ Edit: If you take a look at the schematic for the DMX Shield http://www.inmotion.pt/documen… you can see that R2 and R4 are labeled as “0R”. That means they’re not resistors at all…they’re wires! 0 ohm resistors or “wires” are handy because they effectively act as little jumpers to select different modes. Since we don’t want DE-EN connected to VCC or J1, the closest pad to jump to for GND is RE-EN. What we’re doing here is configuring the chip on the DMX shield to function as a DMX receiver.
+
+
+ 
+
+
+ Once you have made these modifications, you’re good to go for using the Master DMX shield for receiving DMX commands.
+
+
+ Edit: Added photo for clarification.">
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+    
+
+  
+
+  
+
+  <style>figure{margin:0}</style>
+<link rel="shortcut icon" href="https://web.archive.org/web/20160220010638im_/http://33.media.tumblr.com/avatar_ff47a8c5a299_128.png">
+  <link rel="apple-touch-icon" href="http://33.media.tumblr.com/avatar_ff47a8c5a299_128.png">
+  <link rel="alternate" type="application/rss+xml" href="https://web.archive.org/web/20160220010638/http://ericbarch.com/rss">
+  <link rel="stylesheet" href="./modif_dmx_arduino_pour_recevoir_files/jquery.fancybox-1.3.1.css" media="screen">
+
+  
+    <link href="./modif_dmx_arduino_pour_recevoir_files/style.css" media="screen" rel="stylesheet" type="text/css">
+  
+
+  <script type="text/javascript">
+    tumblrUsername = 'ericbarch';
+    searchValue = "Search";
+    themeColor = "#f55b2c";
+    
+    
+    contentWidth = 700;
+    customPhotosets = true;
+    
+    collapseNotes = true;
+    
+    disqusEnabled = true;
+    disqusShortname = "ericbarchdotcom";
+    
+    twitterUsername = "";
+    
+    
+    var showInstagram = false;
+    
+    var accessToken = '';
+    var instaCount = '4';
+    
+    
+    isPermalink = true;
+    photosets = {};
+  </script>
+  <style type="text/css">
+    body {
+      font-family:Helvetica Neue, Arial, sans-serif;
+      color:#616566;
+      background-color:#e6ebea;
+      
+    }
+
+    .blog-title,
+    #sidebar h1,
+    #sidebar h2,
+    #sidebar h3,
+    #footer h1,
+    #footer h2,
+    #footer h3 {
+      font-family:Helvetica Neue, Arial, sans-serif;
+    }
+
+    .copy {
+      font-family:Georgia, serif;
+    }
+    .copy h1,
+    .copy h2,
+    .copy h3,
+    .copy h4,
+    .copy h5,
+    .copy h6,
+    .auto-headings .copy p:first-child strong:first-child,
+    #notes h2,
+    #disqus h2,
+    .speaker {
+      font-family:Helvetica Neue, Arial, sans-serif;
+    }
+
+    #tabs #tabs-nav h2 span.active {
+      background:#e6ebea;
+    }
+
+    
+
+    
+
+    /* Main Theme Color */
+    .colored-panel,
+    .type-answer .user-question,
+    .pages a:hover,
+    .invert .fixed .pages a:hover,
+    .invert .pinned .pages a:hover,
+    .invert #sidebar .pages a:hover,
+    .more-likes:hover,
+    .invert-topbar .fixed .pages a:hover,
+    .like_link a:hover,
+    .type-photoset .navi a:hover,
+    #pagination .nextprev a:hover,
+    #group-members li span,
+    #followed li span {
+      background-color:#f55b2c;
+    }
+    .corners .tl {
+      border-left-color: #f55b2c;
+    }
+    .corners .tr {
+      border-right-color: #f55b2c;
+    }
+    .corners .bl,
+    .corners .br {
+      border-bottom-color:#f55b2c;
+    }
+    #group-members li span:after,
+    #followed li span:after {
+      border-top-color:#f55b2c;
+    }
+
+    /* Outside Link Color */
+    a, #footer-end a:hover {
+      color:#f55b2c;
+    }
+
+    /* Outside Link Hover */
+    a:hover {
+      color:#131313;
+    }
+
+    /* Inside Link Color */
+    .copy a,
+    .copy li:before,
+    .type-chat .speaker,
+    .no-touch #notes-toggle:hover,
+    .touch #notes-toggle.up,
+    ol.notes a,
+    #disqus a {
+      color:#f55b2c;
+    }
+
+    .copy a:hover,
+    ol.notes a:hover {
+      border-color:#f55b2c;
+    }
+    .copy .post-title a:hover,
+    .copy a:hover,
+    ol.notes a:hover,
+    #dsq-comments a:hover,
+    #dsq-options a:hover {
+      background-color:#fff7a5;
+    }
+
+    .no-touch #notes-toggle:hover .icon,
+    .touch #notes-toggle.up .icon,
+    .photo-btns a:hover,
+    #back-to-top .icon {
+      background-color:#f55b2c;
+    }
+
+    /* Colored Area */
+    .colored-panel,
+    .colored-panel a,
+    .colored-panel a:hover,
+    .colored-panel .user-question,
+    .pages a:hover,
+    .invert-topbar .fixed .pages a:hover,
+    .invert #sidebar .pages a:hover,
+    .more-likes:hover,
+    .like_link a:hover,
+    #pagination .nextprev a:hover,
+    #group-members li span,
+    #followed li span {
+      color:#fffadc;
+    }
+
+    /* Colored Area Text Shadow */
+    .type-quote .quote-text,
+    .type-audio .audio-meta,
+    .type-answer .user-question,
+    .pages a:hover,
+    .more-likes:hover,
+    .like_link a:hover,
+    #pagination .nextprev a:hover,
+    #group-members li span,
+    #followed li span {
+      text-shadow:1px 1px #bf4402;
+    }
+
+    ol.notes li.tumblelog_ericbarch {
+      background-color:#fbfbfb;
+    }
+    ol.notes li.tumblelog_ericbarch .action {
+      font-weight:bold;
+    }
+    #page, .inner {
+      margin:0 auto;
+    }
+
+    
+  </style>
+
+  <script src="./modif_dmx_arduino_pour_recevoir_files/modernizr.2.6.1.min.js"></script>
+<link rel="alternate" href="https://web.archive.org/web/20160220010638/android-app://com.tumblr/tumblr/x-callback-url/blog?blogName=ericbarch%26postID=81655982662">
+<link rel="alternate" href="https://web.archive.org/web/20160220010638/ios-app://305343404/tumblr/x-callback-url/blog?blogName=ericbarch&amp;postID=81655982662">
+<link rel="alternate" type="application/json+oembed" href="https://web.archive.org/web/20160220010638/https://www.tumblr.com/oembed/1.0?url=http://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive" title="Using the Tinkerkit Master DMX Shield to Receive DMX
+Recently I worked on a project where I needed to receive DMX commands into an Arduino. All I had on hand was a Tinkerkit Master DMX shield.
+I wasn’t able to find a whole lot of documentation on how...">
+<script src="./modif_dmx_arduino_pour_recevoir_files/tumblelog_post_message_queue.js"></script>
+
+<link rel="stylesheet" type="text/css" href="./modif_dmx_arduino_pour_recevoir_files/stylesheet.css">
+<!-- GOOGLE CAROUSEL --><script type="application/ld+json">{"@type":"SocialMediaPosting","url":"https:\/\/web.archive.org\/web\/20160220010638\/http:\/\/ericbarch.com\/post\/81655982662\/using-the-tinkerkit-master-dmx-shield-to-receive","mainEntityOfPage":true,"datePublished":"2014-04-04T05:16:00-04:00","author":"ericbarch","image":"https:\/\/web.archive.org\/web\/20160220010638\/https:\/\/31.media.tumblr.com\/428e1522e8611b65742abdd85b4b1510\/tumblr_inline_nb4o23ccYs1rfycvd.jpg","headline":"Using the Tinkerkit Master DMX Shield to Receive DMX","articleBody":"Recently I worked on a project where I needed to receive DMX commands into an Arduino. All I had on hand was a Tinkerkit Master DMX shield.\nI wasn\u2019t able to find a whole lot of documentation on how to read DMX with the Tinkerkit shield, as the shield is primarily designed for transmitting. After...","@context":"https:\/\/web.archive.org\/web\/20160220010638\/http:\/\/schema.org\/"}</script>
+<link rel="canonical" href="https://web.archive.org/web/20160220010638/http://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive">
+
+
+
+  <div id="header" class="pinned">
+    <div class="inner">
+      
+
+      
+        <h1 class="blog-title"><a href="https://web.archive.org/web/20160220010638/https://ericbarch.com/">ericbarch(dot)com</a></h1>
+      
+
+      
+
+      
+        <div id="search">
+          <form id="search-form" method="get" action="https://web.archive.org/web/20160220010638/https://ericbarch.com/search">
+            <input type="text" name="q" value="Search">
+          </form>
+        </div>
+      
+      <ul class="menu">
+        
+        <li><a class="archives" href="https://web.archive.org/web/20160220010638/https://ericbarch.com/archive" title="Archive"><span class="icon"></span><span class="label">Archive</span></a></li>
+        <li><a class="rss" href="https://web.archive.org/web/20160220010638/http://ericbarch.com/rss" title="RSS feed"><span class="icon"></span><span class="label">RSS</span></a></li>
+        
+        
+      </ul>
+    </div><!-- .inner -->
+    <div class="shadow"><span></span></div>
+  </div><!-- /#header -->
+
+  <!-- PAGE -->
+  <div id="page" class="right-sidebar clearfix">
+
+    
+
+    
+      
+    
+
+    <div id="content">
+
+      <!-- BEGIN POSTS -->
+      
+        <article id="post-81655982662" class="post
+          type-text 
+          
+          
+          
+          
+          
+          
+          
+          
+           loaded">
+
+          
+            <div class="post-panel">
+              <div class="copy">
+                <h2 class="post-title">Using the Tinkerkit Master DMX Shield to Receive DMX</h2>
+                <p>Recently I worked on a project where I needed to receive DMX commands into an Arduino. All I had on hand was a <a href="https://web.archive.org/web/20160220010638/http://t.umblr.com/redirect?z=http%3A%2F%2Fwww.tinkerkit.com%2Fdmx-master-shield%2F&amp;t=NWE4NTBkODMyYTI3Yzg2OTA4MWM1ZWFiMTE5NGI3YTI3ZGQ5ZTUyYyxXM0pjWlZRdg%3D%3D">Tinkerkit Master DMX shield</a>.</p><p>I wasn’t able to find a whole lot of documentation on how to read DMX with the Tinkerkit shield, as the shield is primarily designed for transmitting. After digging around a bit on the net, I was able to make it work.</p>
+<p><a href="https://web.archive.org/web/20160220010638/http://t.umblr.com/redirect?z=http%3A%2F%2Fwww.tinkerkit.com%2Fdmx-master-shield%2F&amp;t=NWE4NTBkODMyYTI3Yzg2OTA4MWM1ZWFiMTE5NGI3YTI3ZGQ5ZTUyYyxXM0pjWlZRdg%3D%3D">DMXSerial</a> seemed to be a solid library that I wanted to use in my project. DMXSerial uses the hardware serial port on the Arduino to ensure proper timing.</p>
+<p>To make the Master DMX shield work with DMXSerial, you’ll need to flip the two resistors on the sheild labeled TX-Select and RX-Select. This will cause DMX data to be transmitted on the Arduino’s TX/RX UART pins (watch out, you won’t be able to load code with the shield on!). DE-Enable then needs to be connected to GND. This can be done by connecting the DE-Enable pad directly to the GND pin on the RE-ENABLE jumper (bypassing the resistor).</p><p>Edit:&nbsp;If you take a look at the schematic for the DMX Shield <a href="https://web.archive.org/web/20160220010638/http://t.umblr.com/redirect?z=http%3A%2F%2Fwww.inmotion.pt%2Fdocumen&amp;t=YTg5YzE2NjIxNzRmNDIyOTUxYzM4ZDQxNjhmYzg4ZjFiYWE2YmMzYSxXM0pjWlZRdg%3D%3D">http://www.inmotion.pt/documen</a>… you can see that R2 and R4 are labeled as “0R”. That means they’re not resistors at all…they’re wires! 0 ohm resistors or “wires” are handy because they effectively act as little jumpers to select different modes. Since we don’t want DE-EN connected to VCC or J1, the closest pad to jump to for GND is RE-EN. What we’re doing here is configuring the chip on the DMX shield to function as a DMX receiver.</p>
+<img src="./modif_dmx_arduino_pour_recevoir_files/tumblr_inline_nb4o23ccYs1rfycvd.jpg" alt="image"><p></p>
+<p>Once you have made these modifications, you’re good to go for using the Master DMX shield for receiving DMX commands.</p>
+<p>Edit: Added photo for clarification.</p>
+              </div>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+            <div class="meta">
+              <ul class="meta-list">
+
+                
+
+                
+
+                <li class="date">
+                  <a href="https://web.archive.org/web/20160220010638/http://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive" title="Fri. April 4, 2014 @ 1:16 am">
+                    <span class="icon"></span>1 year ago
+                  </a>
+                  
+                </li>
+
+                
+
+                
+                  <li class="comments hidden">
+                    <a id="dsq-81655982662" href="https://web.archive.org/web/20160220010638/http://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive#disqus_thread">
+                      <span class="icon"></span>Comments
+                    </a>
+                  </li>
+                
+
+                <li class="permalink"><a href="https://web.archive.org/web/20160220010638/http://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive"><span class="icon"></span>Permalink</a></li>
+
+              </ul><!--/.meta-list -->
+
+              <div class="share">
+                <span class="toggle">Share</span>
+                <div class="widget">
+                  <div class="short-link">
+                    <p>Short URL<br>
+                    <input type="text" readonly="" value="http://tmblr.co/Z_xe3t1C34sf6"></p>
+                  </div>
+                  <div class="share-links"><a target="_new" href="https://web.archive.org/web/20160220010638/https://twitter.com/intent/tweet?text=Using%20the%20Tinkerkit%20Master%20DMX%20Shield%20to%20Receive%20DMX&amp;url=http://tmblr.co/Z_xe3t1C34sf6&amp;via=ericbarch" class="share-twitter">Twitter</a><a target="_new" href="https://web.archive.org/web/20160220010638/https://www.facebook.com/sharer.php?u=http://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive&amp;t=Using%20the%20Tinkerkit%20Master%20DMX%20Shield%20to%20Receive%20DMX" class="share-facebook">Facebook</a><a target="_new" href="https://web.archive.org/web/20160220010638/http://pinterest.com/pin/create/button/?url=http://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive&amp;media=" class="share-pinterest">Pinterest</a><a target="_new" href="https://web.archive.org/web/20160220010638/https://plus.google.com/share?url=http://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive" class="share-google">Google+</a></div>
+                </div>
+              </div>
+            </div><!-- /.meta -->
+          
+
+          
+            
+
+            
+              
+                <!-- DISQUS COMMENTS -->
+                <div id="disqus">
+                  <h2>Recent comments</h2>
+                  <script type="text/javascript">var disqus_url = "https://web.archive.org/web/20160220010638/http://ericbarch.com/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive"; var disqus_title ="Using the Tinkerkit Master DMX Shield to Receive DMX";</script>
+                  <div id="disqus_thread"></div>
+                  <script type="text/javascript">
+                    var disqus_identifier = 81655982662;
+                    (function() {
+                      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                      dsq.src = 'http://' + disqusShortname + '.disqus.com/embed.js';
+                      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                  </script>
+                  <noscript>Please enable JavaScript to view the &lt;a href="https://web.archive.org/web/20160220010638/http://disqus.com/?ref_noscript="&gt;comments powered by Disqus.&lt;/a&gt;</noscript>
+                  <a href="https://web.archive.org/web/20160220010638/http://disqus.com/" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a>
+                </div><!-- /#disqus -->
+              
+            
+          
+
+          </div><!-- /.post-panel -->
+          <div class="post-shadow"></div>
+        </article><!-- /.post -->
+      
+      <!-- END POSTS -->
+
+      
+
+      
+
+      
+        <div id="pagination">
+          <div class="nextprev">
+            <a class="prev" href="https://web.archive.org/web/20160220010638/http://ericbarch.com/post/124301090577"><span>← Previous</span></a> <span class="sep">•</span>
+            <a class="next" href="https://web.archive.org/web/20160220010638/http://ericbarch.com/post/57292223741"><span>Next →</span></a>
+          </div>
+        </div><!--/#pagination -->
+      
+
+    </div><!-- /#content -->
+
+    <!-- SIDEBAR -->
+      <div id="sidebar">
+        <div id="blog-info" class="side-box">
+          
+            
+          
+
+          
+
+          
+
+          
+            <div class="description">
+              <h2>About</h2>
+              
+              musings on tech, things I see, and a log of things I'll otherwise forget
+<br><br>
+<a href="https://web.archive.org/web/20160220010638/http://ttjcrew.com/">stuff I film</a><br>
+<a href="https://web.archive.org/web/20160220010638/http://github.com/ericbarch">projects I code</a><br>
+<a href="https://web.archive.org/web/20160220010638/http://soundcloud.com/ericbarch">audio I record</a><br>
+<a href="https://web.archive.org/web/20160220010638/http://twitter.com/ericbarch">words I tweet</a><br>
+<a href="https://web.archive.org/web/20160220010638/ts3server://ts.ericbarch.com?port=9987">teamspeak server</a>
+            </div><!--/.description-->
+          
+        </div><!--/#blog-info -->
+
+        
+
+        
+          
+        
+
+        
+
+        <!-- close TABS -->
+
+        
+
+        
+
+        
+
+      </div><!-- /#sidebar -->
+    
+
+    
+
+    <div id="footer">
+      
+
+      <div id="footer-end" class="ruled-top">
+        <div class="footer-copy">
+          <ul id="footer-links">
+            <li><a href="https://web.archive.org/web/20160220010638/https://ericbarch.com/rss">RSS</a></li>
+            <li><a href="https://web.archive.org/web/20160220010638/https://ericbarch.com/random">Random</a></li>
+            <li><a href="https://web.archive.org/web/20160220010638/https://ericbarch.com/archive">Archive</a></li>
+            
+            
+            <li><a href="https://web.archive.org/web/20160220010638/https://ericbarch.com/mobile">Mobile</a></li>
+          </ul>
+          
+        </div>
+        <div class="pixel-union"><a href="https://web.archive.org/web/20160220010638/http://www.tumblr.com/theme/17403"><strong>Effector Theme</strong></a> — <a href="https://web.archive.org/web/20160220010638/https://www.pixelunion.net/?utm_source=tumblr&amp;utm_medium=link&amp;utm_term=tumblr%20themes&amp;utm_campaign=sdoppler">Tumblr themes</a> by <span class="logo">Pixel Union</span></div>
+      </div><!-- /#footer-end -->
+    </div><!-- /#footer -->
+  </div><!-- /#page -->
+
+  <!-- Footer Scripts -->
+
+  <script>
+    function recent_tweets(data){window.tweet_data=data;}
+  </script>
+
+  <script src="./modif_dmx_arduino_pour_recevoir_files/tweets.js"></script>
+
+  <script src="./modif_dmx_arduino_pour_recevoir_files/jquery.min.js"></script>
+
+  <script>window.jQuery || document.write('<script src="https://web.archive.org/web/20160220010638/http://static.tumblr.com/hugxd2w/s4om61ic8/jquery-1.7.2.min.js"><\/script>')</script>
+
+  
+    <script src="./modif_dmx_arduino_pour_recevoir_files/script.js" type="text/javascript"></script>
+  
+
+  <script src="./modif_dmx_arduino_pour_recevoir_files/widgets.js"></script>
+
+  <script src="./modif_dmx_arduino_pour_recevoir_files/plusone.js" type="text/javascript" gapi_processed="true"></script>
+
+  
+
+  
+
+    <script>
+    var themeTitle = "Effector Theme";
+    var url = "https://web.archive.org/web/20160220010638/http://effectortheme.tumblr.com/";
+    (function() {
+        var pxu = document.createElement('script'); pxu.type = 'text/javascript'; pxu.async = true; pxu.src = 'https://web.archive.org/web/20160220010638/http://cdn.pixelunion.net/customize/pxucm.js';
+        var isCustomize = (window.location.href.indexOf('/customize_preview_receiver.html') >= 0);
+        var isDemo = (window.location.href.indexOf(url) >= 0);
+        (isCustomize || isDemo) && ((document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(pxu));
+    })();
+    </script>
+<iframe scrolling="no" width="1" height="1" frameborder="0" style="background-color: transparent; overflow: hidden; position: absolute; top: 0px; left: 0px; z-index: 9999; display: none !important;" id="ga_target" src="./modif_dmx_arduino_pour_recevoir_files/analytics.html"></iframe><script type="text/javascript">
+    (function(){
+        var analytics_frame = document.getElementById('ga_target');
+        var analytics_iframe_loaded;
+        var user_logged_in;
+        var blog_is_nsfw = 'No';
+        var addthis_enabled = false;
+
+        var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+        var eventer = window[eventMethod];
+        var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+        eventer(messageEvent,function(e) {
+            var message = (e.data && e.data.split) ? e.data.split(';') : '';
+            switch (message[0]) {
+                case 'analytics_iframe_loaded':
+                    analytics_iframe_loaded = true;
+                    postCSMessage();
+                    postGAMessage();
+                    postATMessage();
+                    postRapidMessage();
+                    break;
+                case 'user_logged_in':
+                    user_logged_in = message[1];
+                    postGAMessage();
+                    postATMessage();
+                    break;
+            }
+        }, false);
+
+        analytics_frame.src = "https://web.archive.org/web/20160220010638/https://secure.assets.tumblr.com/analytics.html?ab5d9138df4f39e0a422d6b59713a84e" +
+                              "https://web.archive.org/web/20160220010638/http://ericbarch.com/";
+        function postGAMessage() {
+            if (analytics_iframe_loaded && user_logged_in) {
+                var is_ajax = false;
+                analytics_frame.contentWindow.postMessage(['tick_google_analytics', is_ajax, user_logged_in, blog_is_nsfw, '/post/81655982662/using-the-tinkerkit-master-dmx-shield-to-receive?route=%2Fpost%2F%3Aid%2F%3Asummary'].join(';'), analytics_frame.src.split('/analytics.html')[0]);
+            }
+        }
+        function postCSMessage() {
+            COMSCORE = true;
+            analytics_frame.contentWindow.postMessage('enable_comscore;' + window.location, analytics_frame.src.split('/analytics.html')[0]);
+        }
+        function postATMessage() {
+            if (addthis_enabled && analytics_iframe_loaded) {
+                analytics_frame.contentWindow.postMessage('enable_addthis', analytics_frame.src.split('/analytics.html')[0]);
+            }
+        }
+        function postRapidMessage() {
+                            if (analytics_iframe_loaded) {
+                    var is_ajax = '';
+                    var route = '/post/:id/:summary';
+                    var tumblelog_id = '92877374';
+                    var yahoo_space_id = '1197719230';
+                    var rapid_client_only = '1';
+                    var apv = '1';
+                    var rapid_ex = '';
+
+                    analytics_frame.contentWindow.postMessage(
+                        [
+                            'tick_rapid', is_ajax, route, user_logged_in, tumblelog_id,
+                            yahoo_space_id, rapid_client_only, apv, rapid_ex
+                        ].join(';'),
+                        analytics_frame.src.split('/analytics.html')[0]
+                    );
+                }
+                    }
+    })();
+</script><script type="text/javascript">!function(s){s.src='https://web.archive.org/web/20160220010638/https://px.srvcs.tumblr.com/impixu?T=1455930398&J=eyJ0eXBlIjoidXJsIiwidXJsIjoiaHR0cDpcL1wvZXJpY2JhcmNoLmNvbVwvcG9zdFwvODE2NTU5ODI2NjJcL3VzaW5nLXRoZS10aW5rZXJraXQtbWFzdGVyLWRteC1zaGllbGQtdG8tcmVjZWl2ZSIsInJlcXR5cGUiOjAsInJvdXRlIjoiXC9wb3N0XC86aWRcLzpzdW1tYXJ5In0=&U=KBCDNLAEPK&K=3ef3a22d06a75c72df14a6a5f3225cb5ab28a8e496e6ceb2fc21ca90bf2c6d07&R='.replace(/&R=[^&$]*/,'').concat('&R='+escape(document.referrer)).slice(0,2000).replace(/%.?.?$/,'');}(new Image());</script><noscript>&lt;img style="position:absolute;z-index:-3334;top:0px;left:0px;visibility:hidden;" src="https://web.archive.org/web/20160220010638im_/https://px.srvcs.tumblr.com/impixu?T=1455930398&amp;amp;J=eyJ0eXBlIjoidXJsIiwidXJsIjoiaHR0cDpcL1wvZXJpY2JhcmNoLmNvbVwvcG9zdFwvODE2NTU5ODI2NjJcL3VzaW5nLXRoZS10aW5rZXJraXQtbWFzdGVyLWRteC1zaGllbGQtdG8tcmVjZWl2ZSIsInJlcXR5cGUiOjAsInJvdXRlIjoiXC9wb3N0XC86aWRcLzpzdW1tYXJ5Iiwibm9zY3JpcHQiOjF9&amp;amp;U=KBCDNLAEPK&amp;amp;K=67ca9552b896b4227c0491cd78de798901dfcfc99aa92629dfdb583d19ab86bf&amp;amp;R="&gt;</noscript><script>
+        (function (w,d) {
+            'use strict';
+            var l = function(el, type, listener, useCapture) {
+                el.addEventListener ?
+                el.addEventListener(type, listener, !!useCapture) :
+                el.attachEvent && el.attachEvent('on' + type, listener, !!useCapture);
+            };
+            var a = function () {
+                                if (d.getElementById('tumblr-cdx')) {
+                    return;
+                }
+                var s = d.createElement('script');
+                var el = d.getElementsByTagName('script')[0];
+                s.async = true;
+                s.src = 'https://web.archive.org/web/20160220010638/http://assets.tumblr.com/assets/scripts/vendor/cedexis/cedexis.radar.js?_v=7450eec657e34e1e41dac4e1af96a170';
+                s.type = 'text/javascript';
+                s.id = 'tumblr-cdx';
+                d.body.appendChild(s);
+            };
+            l(w,'load',a);
+        }(window, document));
+</script><script type="text/javascript">!function(s){s.src='https://web.archive.org/web/20160220010638/https://px.srvcs.tumblr.com/impixu?T=1455930398&J=eyJ0eXBlIjoicG9zdCIsInVybCI6Imh0dHA6XC9cL2VyaWNiYXJjaC5jb21cL3Bvc3RcLzgxNjU1OTgyNjYyXC91c2luZy10aGUtdGlua2Vya2l0LW1hc3Rlci1kbXgtc2hpZWxkLXRvLXJlY2VpdmUiLCJyZXF0eXBlIjowLCJyb3V0ZSI6IlwvcG9zdFwvOmlkXC86c3VtbWFyeSIsInBvc3RzIjpbeyJwb3N0aWQiOiI4MTY1NTk4MjY2MiIsImJsb2dpZCI6IjkyODc3Mzc0Iiwic291cmNlIjozM31dfQ==&U=NDFMEOODKG&K=6c89b7b95f458c6fab8ec6aba923636e66cdcd05f7932ee618b4d5dd910d2937&R='.replace(/&R=[^&$]*/,'').concat('&R='+escape(document.referrer)).slice(0,2000).replace(/%.?.?$/,'');}(new Image());</script><noscript>&lt;img style="position:absolute;z-index:-3334;top:0px;left:0px;visibility:hidden;" src="https://web.archive.org/web/20160220010638im_/https://px.srvcs.tumblr.com/impixu?T=1455930398&amp;amp;J=eyJ0eXBlIjoicG9zdCIsInVybCI6Imh0dHA6XC9cL2VyaWNiYXJjaC5jb21cL3Bvc3RcLzgxNjU1OTgyNjYyXC91c2luZy10aGUtdGlua2Vya2l0LW1hc3Rlci1kbXgtc2hpZWxkLXRvLXJlY2VpdmUiLCJyZXF0eXBlIjowLCJyb3V0ZSI6IlwvcG9zdFwvOmlkXC86c3VtbWFyeSIsInBvc3RzIjpbeyJwb3N0aWQiOiI4MTY1NTk4MjY2MiIsImJsb2dpZCI6IjkyODc3Mzc0Iiwic291cmNlIjozM31dLCJub3NjcmlwdCI6MX0=&amp;amp;U=NDFMEOODKG&amp;amp;K=d12619e8b8d825bb0211742a7ffda100f5cc2c2e67bb9c39481b4b2d659a49a2&amp;amp;R="&gt;</noscript>
+
+<script src="./modif_dmx_arduino_pour_recevoir_files/index.js"></script>
+
+
+
+<div id="fancybox-tmp"></div><div id="fancybox-loading"><div></div></div><div id="fancybox-overlay"></div><div id="fancybox-wrap"><div id="fancybox-outer"><div id="fancybox-inner"></div><a id="fancybox-close"></a><a href="javascript:;" id="fancybox-left"><span class="fancy-ico" id="fancybox-left-ico"></span></a><a href="javascript:;" id="fancybox-right"><span class="fancy-ico" id="fancybox-right-ico"></span></a></div></div><script async="" src="https://web.archive.org/web/20160220010638/http://assets.tumblr.com/assets/scripts/vendor/cedexis/cedexis.radar.js?_v=7450eec657e34e1e41dac4e1af96a170" type="text/javascript" id="tumblr-cdx"></script><iframe id="rufous-sandbox" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" style="position: absolute; visibility: hidden; display: none; width: 0px; height: 0px; padding: 0px; border: none;" src="./modif_dmx_arduino_pour_recevoir_files/saved_resource.html"></iframe></body></html>
