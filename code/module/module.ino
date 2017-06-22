@@ -37,10 +37,10 @@ const int PIN_IN4 = 7;
 const int MOTOR_1_PINS[] = { PIN_ENA, PIN_IN1, PIN_IN2 };
 const int MOTOR_2_PINS[] = { PIN_ENB, PIN_IN4, PIN_IN3 };
 
-const int PIN_LED_RF_OK_GND = A0;
-const int PIN_LED_RF_OK = A1;
-const int PIN_BTN_MANUALTAKEOVER_GND = A4;
-const int PIN_BTN_MANUALTAKEOVER = A5;
+const int PIN_LED_RF_OK = A0;
+const int PIN_LED_RF_OK_GND = A1;
+const int PIN_BTN_MANUALTAKEOVER = A4;
+const int PIN_BTN_MANUALTAKEOVER_GND = A5;
 
 enum e_state {
   E_STATE_FREE,
